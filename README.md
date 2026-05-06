@@ -83,7 +83,8 @@ A production-ready ML system that:
 ## 🏗 System Architecture
 
 <!-- PLACEHOLDER: Insert your existing architecture diagram here -->
-![System Architecture](docs/architecture_diagram.png)
+![System Architecture]<img width="1024" height="1024" alt="architecture diagram" src="https://github.com/user-attachments/assets/6c3f1b0c-73f0-4e4d-b7d8-ee79612a72af" />
+
 *High-level architecture showing data flow, preprocessing, model inference, and dashboard rendering*
 
 ### Workflow Diagram
@@ -93,7 +94,8 @@ Create a professional technical workflow diagram showing:
 1. Data Input (EEG/ECG sensors) → 2. Data Preprocessing (feature extraction, normalization) → 3. Model Selection Logic (decision tree showing EEG-only vs Hybrid model) → 4. ML Pipeline (StandardScaler → RandomForest) → 5. Prediction Output → 6. Streamlit Dashboard
 Use clean blue/green color scheme, technical icons, arrows showing data flow, modern flat design style
 -->
-![Workflow Diagram](docs/workflow_diagram.png)
+![Workflow Diagram]<img width="1024" height="1024" alt="technical workflow diagram" src="https://github.com/user-attachments/assets/bdbbbfe3-509b-4cdc-904a-ce4982fce9c2" />
+
 *Detailed workflow from data acquisition to prediction delivery*
 
 ---
