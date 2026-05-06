@@ -1,39 +1,39 @@
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
-from sklearn.metrics import accuracy_score, classification_report
+from xgboost import XGBClassifier
 import joblib
 
-# Load processed data
-data = pd.read_csv("data/final_stress_data.csv")
+# Load dataset
+data = pd.read_csv("D:\\stress project\\data\\balanced_40rows_dataset.csv")
 
-# Split features & label
-X = data.drop("stress", axis=1)
+# ECG features (adjust if needed)
+ecg_cols = [col for col in data.columns if "HR" in col or "AVNN" in col or "RMSSD" in col or "LF" in col or "HF" in col]
+
+X = data[ecg_cols]
 y = data["stress"]
 
-# Train/Test split
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
-)
-
 # Model pipeline
-pipeline = Pipeline([
-    ('scaler', StandardScaler()),
-    ('model', RandomForestClassifier(n_estimators=100))
+model = Pipeline([
+    ("scaler", StandardScaler()),
+    ("xgb", XGBClassifier(
+        n_estimators=200,
+        learning_rate=0.05,
+        max_depth=6,
+        subsample=0.8,
+        colsample_bytree=0.8,
+        random_state=42
+    ))
 ])
 
-# Train
-pipeline.fit(X_train, y_train)
+# Cross validation
+scores = cross_val_score(model, X, y, cv=5)
 
-# Test
-pred = pipeline.predict(X_test)
+print("ECG Cross Validation Accuracy:", scores.mean())
 
-print("\nAccuracy:", accuracy_score(y_test, pred))
-print("\nReport:\n", classification_report(y_test, pred))
+# Train final model
+model.fit(X, y)
 
 # Save model
-joblib.dump(pipeline, "model/stress_model.pkl")
-
-print("\n✅ Model Saved!")
+joblib.dump(model, "ecg_model.pkl")

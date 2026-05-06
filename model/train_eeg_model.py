@@ -1,49 +1,41 @@
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import cross_val_score
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
+from xgboost import XGBClassifier
 import joblib
-import os
 
-# Load EEG data
-eeg = pd.read_excel(
-    r"../data/EEG (EO, AC1, AC2).xlsx",
-    sheet_name="Normalize"
-)
+# Load dataset
+data = pd.read_csv("D:\\stress project\\data\\balanced_40rows_dataset.csv")
+# ECG columns
+ecg_cols = [col for col in data.columns if "HR" in col or "AVNN" in col or "RMSSD" in col or "LF" in col or "HF" in col]
 
-# Convert to numeric
-eeg = eeg.apply(pd.to_numeric, errors='coerce')
+# EEG columns
+eeg_cols = [col for col in data.columns if col not in ecg_cols + ["stress"]]
 
-# Drop empty columns & rows
-eeg = eeg.dropna(axis=1, how='all')
-eeg = eeg.dropna()
+X = data[eeg_cols]
+y = data["stress"]
 
-print("Shape after cleaning:", eeg.shape)
-
-# Create labels
-split = len(eeg)//2
-labels = [0]*split + [1]*(len(eeg)-split)
-eeg["stress"] = labels
-
-# Split data
-X = eeg.drop("stress", axis=1)
-y = eeg["stress"]
-
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
-)
-
-# Pipeline
-pipeline = Pipeline([
-    ('scaler', StandardScaler()),
-    ('model', RandomForestClassifier())
+# Model pipeline
+model = Pipeline([
+    ("scaler", StandardScaler()),
+    ("xgb", XGBClassifier(
+        n_estimators=200,
+        learning_rate=0.05,
+        max_depth=6,
+        subsample=0.8,
+        colsample_bytree=0.8,
+        random_state=42
+    ))
 ])
 
-pipeline.fit(X_train, y_train)
+# Cross validation
+scores = cross_val_score(model, X, y, cv=5)
 
-# ===== SAVE IN model FOLDER =====
-save_path = r"../model/stress_model.pkl"
-joblib.dump(pipeline, save_path)
+print("EEG Cross Validation Accuracy:", scores.mean())
 
-print("✅ EEG model trained & saved at:", os.path.abspath(save_path))
+# Train final model
+model.fit(X, y)
+
+# Save model
+joblib.dump(model, "eeg_model.pkl")
