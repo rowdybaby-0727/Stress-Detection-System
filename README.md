@@ -184,7 +184,7 @@ Values: TN=15, FP=2, FN=3, TP=20
 Use blue-green gradient color scheme, white text, clean borders, professional medical software style
 Add title "Stress Detection Confusion Matrix", axis labels "Predicted" and "Actual"
 -->
-![Confusion Matrix](docs/confusion_matrix.png)
+![Confusion Matrix]<img width="1024" height="1024" alt="confusion matrix" src="https://github.com/user-attachments/assets/ae30d2ad-4766-4539-93e7-cb10d3722865" />
 
 ---
 
@@ -382,7 +382,7 @@ Create a technical pipeline diagram showing:
 Input Layer (EEG/ECG raw signals) → Feature Extraction (frequency analysis, time-domain features) → StandardScaler (normalization) → Random Forest Ensemble (show 5 decision trees) → Voting Classifier → Output (Stress/No Stress)
 Use gradient blue background, white/gold accents, technical schematic style, arrows showing data flow, include dimension labels (e.g., "128 features", "15 estimators")
 -->
-![AI Prediction Pipeline](docs/prediction_pipeline.png)
+![AI Prediction Pipeline]<img width="1024" height="1024" alt="pipeline" src="https://github.com/user-attachments/assets/66897776-a9f4-4b43-bf6e-d9cbae4fedd2" />
 
 ### Grad-CAM Visualization Concept
 
